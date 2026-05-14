@@ -8,11 +8,29 @@ st.set_page_config(page_title="Inbox Explorer", page_icon="📩")
 
 # --- 1. AUTHENTICATION ---
 if not st.user.is_logged_in:
-    st.title("📩 Organization Email Assistant")
-    st.write("Log in to analyze specific emails from your inbox.")
     if st.button("Log in with Google"):
         st.login()
     st.stop()
+
+st.write("✅ Step 1: Login Successful")
+
+# CHECKPOINT: Access Token
+if not hasattr(st.user, "access_token") or st.user.access_token is None:
+    st.error("❌ Step 2 Failed: Access Token not found. Check 'expose_tokens' in Secrets.")
+    st.stop()
+else:
+    st.write("✅ Step 2: Access Token Retrieved")
+
+# CHECKPOINT: Gmail Service
+try:
+    creds = Credentials(token=st.user.access_token)
+    gmail_service = build('gmail', 'v1', credentials=creds)
+    results = gmail_service.users().labels().list(userId='me').execute()
+    st.write("✅ Step 3: Gmail API Connected!")
+    st.write("Your Labels:", [l['name'] for l in results.get('labels', [])])
+except Exception as e:
+    st.error(f"❌ Step 3 Failed: {e}")
+
 
 # --- 2. INITIALIZATION ---
 try:
