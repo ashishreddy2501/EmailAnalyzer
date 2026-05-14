@@ -18,7 +18,7 @@ if not st.user.is_logged_in:
 try:
     creds = Credentials(token=st.user.access_token)
     gmail_service = build('gmail', 'v1', credentials=creds)
-    client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+    client = genai.Client(api_key=st.secrets["GOOGLE_API_KEY"])
 except Exception as e:
     st.error(f"Initialization Error: {e}")
     st.stop()
