@@ -6,6 +6,8 @@ from google import genai
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Inbox Explorer", page_icon="📩")
 
+st.title("Email Analyzer")
+
 # --- 1. AUTHENTICATION ---
 if not st.user.is_logged_in:
     if st.button("Log in with Google"):
